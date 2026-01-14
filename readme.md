@@ -1,38 +1,38 @@
-# Домашнее задание к занятию «2.3. Spring Web MVC»
+# Homework assignment for lesson “2.3. Spring Web MVC”
 
-В качестве решения пришлите ссылки на ваши GitHub-проекты в личном кабинете студента на сайте [netology.ru](https://netology.ru).
+As your solution, please send links to your GitHub projects in your personal student account on the website [netology.ru](https://netology.ru).
 
-**Важная информация**
+**Important information**
 
-1. Перед стартом работы изучите, пожалуйста, ссылки на главной странице [репозитория с домашними заданиями](../README.md).
-2. Если у вас что-то не получилось, тогда оформляйте Issue [по установленным правилам](../report-requirements.md).
+1. Before you start, please review the links on the main page [homework repository](../README.md).
+2. If you encounter any issues, please submit an issue [according to the established rules](../report-requirements.md).
 
-## Как сдавать задачи
+## How to submit assignments
 
-1. Создайте на вашем компьютере Maven-проект.
-1. Инициализируйте в нём пустой Git-репозиторий.
-1. Добавьте в него готовый файл [.gitignore](../.gitignore).
-1. Добавьте в этот же каталог остальные необходимые файлы.
-1. Сделайте необходимые коммиты.
-1. Создайте публичный репозиторий на GitHub и свяжите свой локальный репозиторий с удалённым.
-1. Сделайте пуш и удостоверьтесь, что ваш код появился на GitHub.
-1. Ссылку на ваш проект отправьте в личном кабинете на сайте [netology.ru](https://netology.ru).
+1. Create a Maven project on your computer.
+1. Initialize an empty Git repository in it.
+1. Add the ready-made [.gitignore](../.gitignore) file to it.
+1. Add the rest of the necessary files to the same directory.
+1. Make the necessary commits.
+1. Create a public repository on GitHub and link your local repository to the remote one.
+1. Push and make sure your code appears on GitHub.
+1. Send a link to your project in your personal account on the [netology.ru](https://netology.ru) website.
 
 ## Migration
 
-### Легенда
+### Legend
 
-Первая задача простая: нужно смигрировать ваше приложение на сервлетах, написанное в предыдущих домашних заданиях, на Spring Web MVC с Embed Tomcat в Giga IDE.
+The first task is simple: you need to migrate your application on servlets, written in previous homework assignments, to Spring Web MVC with Embed Tomcat in Giga IDE.
 
-### Задача
+### Task
 
-Создайте новый проект в Giga IDE на базе Spring MVC и Embed Tomcat и перенесите реализованную в предыдущих домашних заданиях функциональность.
+Create a new project in Giga IDE based on Spring MVC and Embed Tomcat and transfer the functionality implemented in previous homework assignments.
 
-Ваш контроллер должен выглядеть именно так, как в лекции:
+Your controller should look exactly as it does in the lecture:
 
 ```java
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping(“/api/posts”)
 public class PostController {
   private final PostService service;
 
@@ -45,7 +45,7 @@ public class PostController {
     return service.all();
   }
 
-  @GetMapping("/{id}")
+  @GetMapping(“/{id}”)
   public Post getById(@PathVariable long id) {
     return service.getById(id);
   }
@@ -55,56 +55,56 @@ public class PostController {
     return service.save(post);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping(“/{id}”)
   public void removeById(long id) {
     service.removeById(id);
   }
 }
 ```
 
-Обратите внимание, что вся функциональность (CRUD), реализованная до этого, должна по-прежнему работать.
+Please note that all functionality (CRUD) implemented previously should still work.
 
-### Результат
+### Result
 
-В качестве результата пришлите ссылку на ваш GitHub-проект в личном кабинете студента на сайте [netology.ru](https://netology.ru).
+As a result, send a link to your GitHub project in your personal student account on the [netology.ru](https://netology.ru) website.
 
-## Данные не удаляются* (задача со звёздочкой)
+## Data is not deleted* (task with an asterisk)
 
-Это необязательная задача, её выполнение не влияет на получение зачёта.
+This is an optional task; completing it does not affect your grade.
 
-### Легенда
+### Legend
 
-Самое плохое, что можно сделать с пользовательскими данными, — это безвозвратно их удалить. Пользователи позже всегда звонят с просьбой их восстановить и утверждают, что они точно ничего сами не удаляли. Поэтому чаще всего пользовательские данные не удаляют, а помечают на удаление, т. е. добавляют какое-то поле, например, `removed`.
+The worst thing you can do with user data is to delete it permanently. Users always call later asking to restore it and claim that they definitely did not delete anything themselves. Therefore, most often, user data is not deleted, but marked for deletion, i.e., a field such as `removed` is added.
 
-Для простоты мы будем считать, что `/api/posts` — это API для клиентов, где они не смогут реализовать восстановление удалённых постов и даже просмотреть удалённые посты. Для этого позже будет отдельное API.
+For simplicity, we will assume that `/api/posts` is an API for clients, where they will not be able to restore deleted posts or even view deleted posts. There will be a separate API for this later.
 
-Получается, что `removeById` всего лишь выставляет это поле. Работа остальных методов тоже кардинально меняется:
+It turns out that `removeById` only sets this field. The behavior of the other methods also changes dramatically:
 
-* `all` возвращает все посты, кроме тех, у которых выставлен флаг `removed`;
-* `getById` возвращает пост, только если у него не выставлен флаг `removed`, в противном случае кидает `NotFoundException`*;
-* `save` обновляет существующий пост, только если у него не выставлен флаг `removed`, в противном случае кидает `NotFoundException`*.
+* `all` returns all posts except those with the `removed` flag set;
+* `getById` returns a post only if it does not have the `removed` flag set, otherwise it throws a `NotFoundException`*;
+* `save` updates an existing post only if it does not have the `removed` flag set, otherwise it throws a `NotFoundException`*.
 
-Примечание.* Здесь нет идеального решения, разные люди могут вам говорить, что так можно или так нельзя и т. д. Мы же лишь скажем, что любая категоричность — это всегда плохо, и вы должны понимать, что возможны разные варианты. Всё зависит от того, какое решение примет проектировщик API или команда.
+Note.* There is no perfect solution here, different people may tell you that this is possible or impossible, etc. We will only say that any categorical statement is always bad, and you should understand that there are different options. It all depends on what decision the API designer or team makes.
 
-Остаётся единственный вопрос со статус-кодами. По логике, `NotFoundException` должен приводить к статус-коду 404. Изучите документацию на [@ResponseStatus](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/ResponseStatus.html) и подумайте, как её применить для выставления статус-кода 404 при возникновении указанного нами Exception.
+The only question that remains is about status codes. Logically, `NotFoundException` should result in a 404 status code. Study the documentation on [@ResponseStatus](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/ResponseStatus.html) and think about how to apply it to return a 404 status code when the exception we mentioned occurs.
 
 <details>
-<summary>Подсказка.</summary>
+<summary>Hint.</summary>
 
-Использовать её нужно в формате `@ResponseStatus(code = HttpStatus.NOT_FOUND)`, при этом импортировать и `ResponseStatus`, и `HttpStatus`.
+It should be used in the format `@ResponseStatus(code = HttpStatus.NOT_FOUND)`, while importing both `ResponseStatus` and `HttpStatus`.
 </details>
 
-### Задача
+### Task
 
-Создайте Pull Request с описанной функциональностью к проекту из первой задачи (Migration).
+Create a Pull Request with the described functionality for the project from the first task (Migration).
 
-Решение по тому, на каком именно слое реализовать эту логику, остаётся за вами. Но это точно должен быть не Controller.
+The decision on which layer to implement this logic on is up to you. But it definitely should not be Controller.
 
-Обратите внимание, что вся функциональность (CRUD), реализованная до этого, должна по-прежнему работать.
+Please note that all functionality (CRUD) implemented before this should still work.
 
-### Результат
+### Result
 
-В качестве результата пришлите:
+As a result, send:
 
-* ссылку на ваш Pull Request в личном кабинете студента на сайте [netology.ru](https://netology.ru);
-* обоснование, почему вы реализовали логику именно в том слое, в котором дан результат.
+* a link to your Pull Request in your personal student account on the website [netology.ru](https://netology.ru);
+* an explanation of why you implemented the logic in the layer specified in the result.
